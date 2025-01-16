@@ -33,4 +33,4 @@ if [[ $SPRINT_NUMBER != 12 && $SPRINT_NUMBER != 13 ]]; then
   print_red "$SPRINT_NUMBER in file 'sprint.txt' is not a valid sprint number!"
   print_orange "Use 12 or 13 depending on the print you're working on"
   exit 1
-fir 
+fi
