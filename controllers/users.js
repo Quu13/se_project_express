@@ -20,7 +20,6 @@ User.findById(userId)
   .then((user) => res.status(200).send(user))
   .catch((error) => {
     console.error(error);
-    console.log(error.name);
     if (error.name === "CastError") {
       return res.status(BAD_REQUEST).send({ message: error.message });
     }
