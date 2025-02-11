@@ -30,6 +30,7 @@ const getItem = (req, res) => {
 
   const deleteItem = (req, res) => {
     const { itemId } = req.params;
+    const itemOwner = req.user._id;
   
     ClothingItem.findByIdAndDelete(itemId)
       .orFail()
