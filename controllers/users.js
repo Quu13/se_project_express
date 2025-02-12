@@ -11,18 +11,6 @@ const {
   SERVER_ERROR,
 } = require("../utils/errors");
 
-// const getUsers = (req, res) => {
-//   User.find({})
-//     .then((users) => res.send(users))
-//     .catch((err) => {
-//       console.error(err);
-//       console.log(err.name);
-//       return res
-//         .status(SERVER_ERROR)
-//         .send({ message: "An error has occured on the server" });
-//     });
-// };
-
 const getCurrentUser = (req, res) => {
   const userId = req.user._id;
   User.findById(userId)
