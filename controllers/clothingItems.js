@@ -1,5 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
-const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require("../utils/errors");
+const { OK, BAD_REQUEST, NOT_FOUND, FORBIDDEN, SERVER_ERROR } = require("../utils/errors");
 
 const getItem = (req, res) => {
     ClothingItem.find({})
@@ -32,22 +32,33 @@ const getItem = (req, res) => {
     const { itemId } = req.params;
     const itemOwner = req.user._id;
   
-    ClothingItem.findByIdAndDelete(itemId)
-      .orFail()
-      .then((item) => res.status(200).send(item))
-      .catch((error) => {
-        console.error(error);
-        if (error.name === "CastError") {
-          return res.status(BAD_REQUEST).send({ message: error.message });
-        }
-        if (error.name === "DocumentNotFoundError") {
-          return res.status(NOT_FOUND).send({ message: error.message });
-        }
-        return res
-          .status(SERVER_ERROR)
-          .send({ message: "An error has occurred on the server" });
-      });
-  };
+    ClothingItem.findById(itemId)
+    .then((item) => {
+      if (!item) {
+        throw new Error("NotFound");
+      }
+      if (item.owner.toString() !== itemOwner) {
+        throw new Error("Forbidden");
+      }
+      return ClothingItem.findByIdAndDelete(itemId);
+    })
+    .then((item) => res.status(OK).send(item))
+    .catch((error) => {
+      console.error(error);
+      if (error.message === "NotFound") {
+        return res.status(NOT_FOUND).send({ message: error.message });
+      }
+      if (error.message === "Forbidden") {
+        return res.status(FORBIDDEN).send({ message: error.message });
+      }
+      if (error.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: error.message });
+      }
+      return res
+        .status(SERVER_ERROR)
+        .send({ message: "An error has occurred on the server" });
+    });
+};
   
   const likeItem = (req, res) => {
     ClothingItem.findByIdAndUpdate(
