@@ -105,6 +105,7 @@ const updateUser = (req, res) => {
     { name, avatar },
     { new: true, runValidators: true }
   )
+  
     .then((updatedUser) => {
       if (!updatedUser) {
         return res.status(NOT_FOUND).send({ message: "User not Found" });
