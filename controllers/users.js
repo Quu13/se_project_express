@@ -89,9 +89,10 @@ const login = (req, res) => {
       return res.status(OK).json(token);
     })
     .catch((error) => {
-      console.error(error);
-      console.log(error.name);
-      return res.status(UNAUTH_ERROR).send({ message: error.message });
+      if (error.message === "Incorrect email or password") {
+        return res.status(UNAUTH_ERROR).send({ message: error.message });
+      }
+      return res.status(SERVER_ERROR).send({ message: error.message });
     });
 };
 
