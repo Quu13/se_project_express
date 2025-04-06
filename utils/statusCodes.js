@@ -1,0 +1,8 @@
+module.exports = {
+    BAD_REQUEST: 400,
+    UNAUTH_ERROR: 401,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+    CONFLICT_ERROR: 409,
+    SERVER_ERROR: 500
+  };
