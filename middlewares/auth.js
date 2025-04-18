@@ -1,25 +1,27 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
-const { UnauthorizedError } = require("../utils/errors");  // Import custom error
+const { UnauthorizedError } = require("../utils/errors");
 
 const auth = (req, res, next) => {
+  try {
     const { authorization } = req.headers;
-  
+
     if (!authorization || !authorization.startsWith("Bearer ")) {
-      return next(new UnauthorizedError("Authorization Required"));  // Pass the error to the next middleware
+      throw new UnauthorizedError("Authorization Required");
     }
 
     const token = authorization.replace("Bearer ", "");
-    let payload;
-
-    try {
-        payload = jwt.verify(token, JWT_SECRET);
-    } catch (error) {
-        return next(new UnauthorizedError("Authorization Required"));  // Pass the error to the next middleware
-    }
+    const payload = jwt.verify(token, JWT_SECRET);
 
     req.user = payload;
-    return next();
+    next();
+  } catch (error) {
+    if (error.name === 'JsonWebTokenError' || error instanceof UnauthorizedError) {
+      next(new UnauthorizedError("Authorization Required"));
+    } else {
+      next(error); // Pass other errors to general error handler
+    }
+  }
 };
 
 module.exports = auth;
