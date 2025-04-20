@@ -3,7 +3,6 @@ const {
   BadRequestError,
   NotFoundError,
   ForbiddenError,
-  ConflictError,
 } = require("../utils/errors");  // Import custom errors
 
 // Get all items
@@ -35,15 +34,17 @@ const deleteItem = (req, res, next) => {
   ClothingItem.findById(itemId)
     .then((item) => {
       if (!item) {
-        return next(new NotFoundError("Item not found"));
+        throw new NotFoundError("Item not found");  // throw instead of return next()
       }
       if (item.owner.toString() !== itemOwner) {
-        return next(new ForbiddenError("You do not have permission to delete this item"));
+        throw new ForbiddenError("You do not have permission to delete this item");
       }
       return ClothingItem.findByIdAndDelete(itemId);
     })
-    .then((item) => res.status(200).send(item))  // 200 OK
-    .catch(next);  // Pass error to the error handler
+    .then((deletedItem) => {
+      res.status(200).send(deletedItem);
+    })
+    .catch(next);
 };
 
 // Like an item

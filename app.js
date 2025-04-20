@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -5,7 +7,7 @@ const { errors } = require("celebrate"); // Celebrate validation error handler
 const indexRouter = require("./routes/index"); // Your routes file
 const errorHandler = require("./middlewares/error-handler"); // Centralized error handler
 const { requestLogger, errorLogger } = require("./middlewares/logger"); // Loggers
-require('dotenv').config();
+
 
 const app = express();
 const { PORT = 3001 } = process.env;

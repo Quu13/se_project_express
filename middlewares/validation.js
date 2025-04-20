@@ -21,6 +21,10 @@ module.exports.validateCardBody = celebrate({
       "string.empty": 'The "imageUrl" field must be filled in',
       "string.uri": 'The "imageUrl" field must be a valid URL',
     }),
+    weather: Joi.string().valid('hot', 'warm', 'cold').required().messages({
+      "any.only": 'The "weather" field must be one of [hot, warm, cold]',
+      "string.empty": 'The "weather" field must be filled in',
+    }),
   }),
 });
 
@@ -62,10 +66,25 @@ module.exports.validateLogin = celebrate({
 // 4. Validate IDs (Item/User IDs for GET requests)
 module.exports.validateId = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().length(24).hex().required().messages({
+    itemId: Joi.string().length(24).hex().required().messages({
       "string.length": 'ID must be exactly 24 characters long',
       "string.hex": 'ID must be a valid hexadecimal string',
       "string.empty": 'ID must be provided',
+    }),
+  }),
+});
+
+// 5. Validate Update User Info (Patch User Info)
+module.exports.validateUpdateUser = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30).messages({
+      "string.min": 'The minimum length of the "username" field is 2',
+      "string.max": 'The maximum length of the "username" field is 30',
+      "string.empty": 'The "username" field must be filled in',
+    }),
+    avatar: Joi.string().required().custom(validateURL).messages({
+      "string.empty": 'The "avatar" field must be filled in',
+      "string.uri": 'The "avatar" field must be a valid URL',
     }),
   }),
 });

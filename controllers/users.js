@@ -41,7 +41,12 @@ const createUser = (req, res, next) => {
       delete userCopy.password;
       res.status(200).send({ user: userCopy });
     })
-    .catch(next);  // Pass error to the error handler
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return next(new BadRequestError("Invalid data"));
+      }
+      return next(err);
+    });
 };
 
 // User login
@@ -52,7 +57,7 @@ const login = (req, res, next) => {
     return next(new BadRequestError("Email and password are required"));
   }
 
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)  // <--- ADD return here
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
@@ -63,7 +68,7 @@ const login = (req, res, next) => {
       if (err.message === "Incorrect email or password") {
         return next(new UnauthorizedError("Incorrect email or password"));
       }
-      return next(err);  // Pass other errors to the error handler
+      return next(err);
     });
 };
 
@@ -83,7 +88,12 @@ const updateUser = (req, res, next) => {
       }
       return res.status(200).send(updatedUser);
     })
-    .catch(next);  // Pass error to the error handler
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return next(new BadRequestError("Invalid data"));
+      }
+      return next(err);
+    });
 };
 
 module.exports = { getCurrentUser, createUser, login, updateUser };
