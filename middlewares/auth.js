@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
-const { UnauthorizedError } = require("../utils/errors");  // Import custom error
+const { UnauthorizedError } = require("../utils/error");  // Updated import path
 
 const auth = (req, res, next) => {
     const { authorization } = req.headers;

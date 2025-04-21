@@ -7,7 +7,7 @@ const {
   UnauthorizedError,
   NotFoundError,
   ConflictError,
-} = require("../utils/errors");  // Import custom errors
+} = require("../utils/error");  // Import custom errors from the new error directory
 
 // Get current user
 const getCurrentUser = (req, res, next) => {

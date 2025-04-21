@@ -3,7 +3,7 @@ const {
   BadRequestError,
   NotFoundError,
   ForbiddenError,
-} = require("../utils/errors");  // Import custom errors
+} = require("../utils/error");  // Import custom errors from the new error directory
 
 // Get all items
 const getItem = (req, res, next) => {

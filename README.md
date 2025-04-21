@@ -11,6 +11,13 @@ This projects will introduce the user/viewer to the Back End project,  with a fo
 * RESTful API: An architectural style for an API that uses HTTP request to access and use data.
 * Postman: Allows developers to test, document, and share APIs.
 
+## Link to Backend 
+
+https://api.weatherwars.twilightparadox.com
+
+## Link to Frontend
+https://weatherwars.twilightparadox.com
+
 
 #### Running the Project
 `npm run start` — to launch the server 
